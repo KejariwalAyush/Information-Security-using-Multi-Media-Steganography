@@ -2,7 +2,7 @@ import cv2, sys
 import numpy as np
 
 # here starts encoding of the msg
-def encode():
+def encode(): 
 	msg = input("enter message to be hidden : ")
 	# msg = "Hii this is Ayush Kejariwal , this is test code encryption. with special char @"
 	imgloc = input("image location with image name (with png extention) : ")
@@ -15,18 +15,25 @@ def encode():
 	# Number of Channels represents the number of components used to represent each pixel.
 	# cv2.imshow('image',img)                   # to show the unstegno image
 	pixel = []
-	for n in range(1,h):
-		if (img[n,n][0]!=0) & (img[n,n][1]!=0) & (img[n,n][2] != 0) :       # to extract pixels leaving [0 0 0] type of pixels
-			pixel.append(img[n, n])
+	if w>h :
+		g=h
+	else :
+		g=w
+	for n in range(1,g):
+		if (img[1,n][0]!=0) & (img[1,n][1]!=0) & (img[1,n][2] != 0) :       # to extract pixels leaving [0 0 0] type of pixels
+			pixel.append(img[1, n])
 	# for i in pixel:
 	# 	print (i,end=' ')               # to print unedited image pixels
 	# print (len(pixel)) 
 	i,j,k=0,0,0
 	# i here is for msg counter of character which will be updated when the funct change is called
 	# below under 1st while (whole) encryption code has been written
-	while (i<len(msg)):
-		no = ord(msg[i])
-		b = '0'+"{0:b}".format(no)
+	while (i<=len(msg)):
+		if i==len(msg):
+			b='11111111'
+		else :
+			no = ord(msg[i])
+			b = '0'+"{0:b}".format(no)
 		if (len(b)==7):								# this is for smaller binary values like for space its 32
 			b='0'+b									# and its binary is 0100000 after tranformation 00100000
 		elif (len(b)==6):
@@ -52,9 +59,9 @@ def encode():
 		i+=1
 	print ('Encrypted ,\nimage is saved with name "enc_img.png" at the location of this program')
 	j=0
-	for n in range(1,h):
-		if (img[n,n][0]!=0) & (img[n,n][1]!=0) & (img[n,n][2] != 0) & (j<len(pixel)) :
-			img[n][n]=pixel[j]
+	for n in range(1,g):
+		if (img[1,n][0]!=0) & (img[1,n][1]!=0) & (img[1,n][2] != 0) & (j<len(pixel)) :
+			img[1][n]=pixel[j]
 		j+=1
 	# in above for loop we have created the encrypted image 
 	enc_img = img
@@ -73,13 +80,17 @@ def decode():
 	imgloc=imgloc.replace('\\','/')
 	img = cv2.imread(imgloc)      # importing image from which msg will be extracted
 	# print('Image Dimensions :', img.shape)
-	cv2.imshow('image',img)
+	# cv2.imshow('image',img)
 	h = img.shape[0]
 	w = img.shape[1]
 	pixel = []
-	for n in range(1,h):
-		if (img[n,n][0]!=0) & (img[n,n][1]!=0) & (img[n,n][2] != 0) :       # to extract pixels leaving [0 0 0] type of pixels
-			pixel.append(img[n, n])
+	if w>h :
+		g=h
+	else :
+		g=w
+	for n in range(1,g):
+		if (img[1,n][0]!=0) & (img[1,n][1]!=0) & (img[1,n][2] != 0) :       # to extract pixels leaving [0 0 0] type of pixels
+			pixel.append(img[1, n])
 	# for i in pixel:
 	# 	print (i,end=' ')      
 	j,x=0,0
@@ -101,7 +112,7 @@ def decode():
 		j+=1
 		# print (b)
 		no = int(b,2)                       # converts to a no. from its binary
-		if (no>127) | (no<0) :              # ascii values range is from 0 to 127
+		if (b=='11111111') | (no>127) | (no<0) :              # ascii values range is from 0 to 127
 			break
 		else :
 			pass
