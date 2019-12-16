@@ -21,6 +21,6 @@ Steganography is applicable to, but not limited to, the following areas.
 4. Media Database systems 
 The area differs in what feature of the steganography is utilized in each system 
 
-##Future work
+## Future work
 1. Hide text under audio file and integrate it with video file to increase the security of the message. 2. Hide image under video file
 
